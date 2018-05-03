@@ -22,13 +22,13 @@ Providing you have a local MongoDB instance
 ```bash
 $ go build -o app && ./app
 ```
-#### APIs
-##### Importing the CSV file into Mongo
+### APIs
+#### Importing the CSV file into Mongo
 ```
 POST: http://localhost:5000/api/vehicle/import
 ```
 
-##### Retrieving all vehicles
+#### Retrieving all vehicles
 ```
 GET: http://localhost:5000/api/vehicle
 ```
@@ -39,7 +39,7 @@ You can add the following URL params:<br>
 - trim
 - derivative
 
-##### Retrieve one vehicle with image
+#### Retrieve one vehicle with image
 ```
 GET: http://localhost:5000/api/vehicle/:id
 ```
