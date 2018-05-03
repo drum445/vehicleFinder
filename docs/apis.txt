@@ -1,0 +1,14 @@
+Import File:
+POST: http://localhost:5000/api/vehicle/import
+
+Vehicles:
+GET: http://localhost:5000/api/vehicle
+You can add the following URL params:
+  make
+  shortModel
+  longMondel
+  trim
+  derivative
+
+Vehicle:
+GET: http://localhost:5000/api/vehicle/:id

@@ -1,0 +1,6 @@
+Start MongoDB
+
+$ cd backend
+$ go get
+$ go build
+$ ./be
