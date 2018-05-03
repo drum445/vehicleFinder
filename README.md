@@ -3,13 +3,6 @@
 API for retrieving vehicles
 
 ## Installation
-
-Add this to your source code
-
-```go
-import "github.com/drum445/vehicleFinder"
-```
-
 Run in a terminal in your project root
 
 ```bash
