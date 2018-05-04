@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/drum445/vehicleFinder/controllers"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
@@ -14,9 +15,9 @@ func main() {
 
 	// Disable strictslash so both "/api/vehicle" and "/api/vehicle/" work
 	router.StrictSlash(true)
-	router.HandleFunc("/api/vehicle/", getVehicles).Methods("GET")
-	router.HandleFunc("/api/vehicle/{vehicleID}/", getVehicleByID).Methods("GET")
-	router.HandleFunc("/api/vehicle/import", postVehicles).Methods("POST")
+	router.HandleFunc("/api/vehicle/", controllers.GetVehicles).Methods("GET")
+	router.HandleFunc("/api/vehicle/{vehicleID}/", controllers.GetVehicleByID).Methods("GET")
+	router.HandleFunc("/api/vehicle/import", controllers.PostVehicles).Methods("POST")
 
 	fmt.Println("started on port :5000")
 

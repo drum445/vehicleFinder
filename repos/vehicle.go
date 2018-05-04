@@ -1,7 +1,7 @@
 package repos
 
 import (
-	"../models"
+	"github.com/drum445/vehicleFinder/models"
 	"gopkg.in/mgo.v2/bson"
 )
 

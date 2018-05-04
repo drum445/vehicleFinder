@@ -6,14 +6,14 @@ API for retrieving vehicles
 Run in a terminal in your project root
 
 ```bash
-$ cd src && go get
+$ go get
 ```
 
 ## Usage
 Providing you have a local MongoDB instance
 
 ```bash
-$ go build -o app && ./app
+$ go build && ./vehicleFinder
 ```
 ### APIs
 #### Importing the CSV file into Mongo

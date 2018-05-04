@@ -1,4 +1,4 @@
-package main
+package controllers
 
 import (
 	"encoding/csv"
@@ -8,18 +8,17 @@ import (
 	"os"
 	"strconv"
 
-	. "./models"
-	"./repos"
-
+	"github.com/drum445/vehicleFinder/models"
+	"github.com/drum445/vehicleFinder/repos"
 	"github.com/gorilla/mux"
 )
 
-type Response struct {
-	Count    int      `json:"count"`
-	Vehicles Vehicles `json:"vehicles,omitempty"`
+type response struct {
+	Count    int             `json:"count"`
+	Vehicles models.Vehicles `json:"vehicles,omitempty"`
 }
 
-func getVehicles(w http.ResponseWriter, req *http.Request) {
+func GetVehicles(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	// map[string]string of all our expected params
@@ -35,13 +34,13 @@ func getVehicles(w http.ResponseWriter, req *http.Request) {
 	vehicles := db.GetVehicles(m)
 	defer db.Close()
 
-	var resp Response
+	var resp response
 	resp.Count = len(vehicles)
 	resp.Vehicles = vehicles
 	json.NewEncoder(w).Encode(resp)
 }
 
-func getVehicleByID(w http.ResponseWriter, req *http.Request) {
+func GetVehicleByID(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	params := mux.Vars(req)
@@ -51,7 +50,7 @@ func getVehicleByID(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	var vehicle Vehicle
+	var vehicle models.Vehicle
 	vehicle.ID = vehicleID
 
 	db := repos.Init()
@@ -65,7 +64,7 @@ func getVehicleByID(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(vehicle)
 }
 
-func postVehicles(w http.ResponseWriter, req *http.Request) {
+func PostVehicles(w http.ResponseWriter, req *http.Request) {
 	// open db connection and close after func end
 	db := repos.Init()
 	defer db.Close()
@@ -91,7 +90,7 @@ func postVehicles(w http.ResponseWriter, req *http.Request) {
 		} else if err != nil {
 			panic(err)
 		}
-		var vehicle Vehicle
+		var vehicle models.Vehicle
 		vehicle.ID, _ = strconv.Atoi(record[0])
 		vehicle.Make = record[1]
 		vehicle.ShortModel = record[2]
