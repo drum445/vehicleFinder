@@ -22,17 +22,15 @@ func (db DB) GetVehicles(params map[string]string) (vehicles models.Vehicles) {
 	return
 }
 
-func (db DB) GetVehicle(vehicle *models.Vehicle) bool {
+func (db DB) GetVehicle(vehicleID int) (vehicle models.Vehicle, found bool) {
 	// attempt to look for vehicle, return false if it doesn't exist
-	filter := bson.M{"_id": vehicle.ID}
+	filter := bson.M{"_id": vehicleID}
 	err := db.Vehicles.Find(filter).One(&vehicle)
-	if err != nil {
-		return false
+	if err == nil {
+		found = true
 	}
 
-	// call the image API and assign our image to the vehicle
-	vehicle.Image = models.GetImage(vehicle.ID)
-	return true
+	return
 }
 
 func (db DB) InsertVehicle(vehicle models.Vehicle) {

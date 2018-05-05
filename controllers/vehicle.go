@@ -50,17 +50,16 @@ func GetVehicleByID(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	var vehicle models.Vehicle
-	vehicle.ID = vehicleID
-
 	db := repos.Init()
-	found := db.GetVehicle(&vehicle)
+	vehicle, found := db.GetVehicle(vehicleID)
 	defer db.Close()
 
 	if !found {
 		http.Error(w, "vehicle ID not found", 401)
 		return
 	}
+
+	vehicle.Image = repos.GetImage(vehicle.ID)
 	json.NewEncoder(w).Encode(vehicle)
 }
 
@@ -70,19 +69,17 @@ func PostVehicles(w http.ResponseWriter, req *http.Request) {
 	defer db.Close()
 
 	file, err := os.Open("Vehicles.csv")
+	defer file.Close()
 
 	if err != nil {
 		panic(err)
 	}
-	defer file.Close()
 
+	// load file then skip Header
 	reader := csv.NewReader(file)
-
-	// skip Header
 	reader.Read()
 
-	// loop through each record create a vehicle object
-	// and import it into mongo
+	// loop through each record create a vehicle object and import it into db
 	for {
 		record, err := reader.Read()
 		if err == io.EOF {
