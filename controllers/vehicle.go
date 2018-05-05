@@ -69,7 +69,7 @@ func PostVehicles(w http.ResponseWriter, req *http.Request) {
 	db := repos.Init()
 	defer db.Close()
 
-	file, err := os.Open("../Vehicles.csv")
+	file, err := os.Open("Vehicles.csv")
 
 	if err != nil {
 		panic(err)
