@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/csv"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -34,6 +35,7 @@ func GetVehicles(w http.ResponseWriter, req *http.Request) {
 	vehicles := db.GetVehicles(m)
 	defer db.Close()
 
+	// create our response object and encode to json
 	var resp response
 	resp.Count = len(vehicles)
 	resp.Vehicles = vehicles
@@ -64,10 +66,6 @@ func GetVehicleByID(w http.ResponseWriter, req *http.Request) {
 }
 
 func PostVehicles(w http.ResponseWriter, req *http.Request) {
-	// open db connection and close after func end
-	db := repos.Init()
-	defer db.Close()
-
 	file, err := os.Open("Vehicles.csv")
 	defer file.Close()
 
@@ -79,7 +77,8 @@ func PostVehicles(w http.ResponseWriter, req *http.Request) {
 	reader := csv.NewReader(file)
 	reader.Read()
 
-	// loop through each record create a vehicle object and import it into db
+	// loop through each record create a vehicle object and append to ur vehicles
+	var vehicles models.Vehicles
 	for {
 		record, err := reader.Read()
 		if err == io.EOF {
@@ -98,7 +97,13 @@ func PostVehicles(w http.ResponseWriter, req *http.Request) {
 		vehicle.Discontinued = record[7]
 		vehicle.Available = record[8]
 
-		// Insert into DB
-		db.InsertVehicle(vehicle)
+		vehicles = append(vehicles, vehicle)
 	}
+
+	// once vehicles object is created bulik insert into db
+	db := repos.Init()
+	db.InsertVehicles(vehicles)
+	defer db.Close()
+
+	fmt.Fprint(w, fmt.Sprintf("Finished importing %v rows", len(vehicles)))
 }

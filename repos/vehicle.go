@@ -36,3 +36,14 @@ func (db DB) GetVehicle(vehicleID int) (vehicle models.Vehicle, found bool) {
 func (db DB) InsertVehicle(vehicle models.Vehicle) {
 	db.Vehicles.Insert(vehicle)
 }
+
+func (db DB) InsertVehicles(vehicles models.Vehicles) {
+	s := make([]interface{}, len(vehicles))
+	for i, v := range vehicles {
+		s[i] = v
+	}
+
+	x := db.Vehicles.Bulk()
+	x.Insert(s...)
+	x.Run()
+}
