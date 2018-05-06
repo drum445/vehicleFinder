@@ -15,9 +15,12 @@ func main() {
 
 	// Disable strictslash so both "/api/vehicle" and "/api/vehicle/" work
 	router.StrictSlash(true)
-	router.HandleFunc("/api/vehicle/", controllers.GetVehicles).Methods("GET")
-	router.HandleFunc("/api/vehicle/{vehicleID}/", controllers.GetVehicleByID).Methods("GET")
-	router.HandleFunc("/api/vehicle/import", controllers.PostVehicles).Methods("POST")
+
+	// vehicle sub router
+	vehicleSubRoute := router.PathPrefix("/api/vehicle").Subrouter()
+	vehicleSubRoute.HandleFunc("/", controllers.GetVehicles).Methods("GET")
+	vehicleSubRoute.HandleFunc("/{vehicleID}", controllers.GetVehicleByID).Methods("GET")
+	vehicleSubRoute.HandleFunc("/import", controllers.PostVehicles).Methods("POST")
 
 	fmt.Println("started on port :5000")
 

@@ -36,17 +36,18 @@ func GetVehicles(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// map[string]string of all our expected params
-	m := make(map[string]string)
-	m["make"] = req.URL.Query().Get("make")
-	m["shortModel"] = req.URL.Query().Get("shortModel")
-	m["longModel"] = req.URL.Query().Get("longModel")
-	m["trim"] = req.URL.Query().Get("trim")
-	m["derivative"] = req.URL.Query().Get("derivative")
-	m["available"] = "Y"
+	m := map[string]string{
+		"make":       req.URL.Query().Get("make"),
+		"shortModel": req.URL.Query().Get("shortModel"),
+		"longModel":  req.URL.Query().Get("longModel"),
+		"trim":       req.URL.Query().Get("trim"),
+		"derivative": req.URL.Query().Get("derivative"),
+		"available":  "Y",
+	}
 
 	db := repos.Init()
-	count, vehicles := db.GetVehicles(page, m)
 	defer db.Close()
+	count, vehicles := db.GetVehicles(page, m)
 
 	// create our response object and encode to json
 	var resp response
@@ -66,8 +67,8 @@ func GetVehicleByID(w http.ResponseWriter, req *http.Request) {
 	}
 
 	db := repos.Init()
-	vehicle, found := db.GetVehicle(vehicleID)
 	defer db.Close()
+	vehicle, found := db.GetVehicle(vehicleID)
 
 	if !found {
 		http.Error(w, "vehicle ID not found", 400)
@@ -115,8 +116,8 @@ func PostVehicles(w http.ResponseWriter, req *http.Request) {
 
 	// once vehicles object is created bulik insert into db
 	db := repos.Init()
-	db.InsertVehicles(vehicles)
 	defer db.Close()
+	db.InsertVehicles(vehicles)
 
 	fmt.Fprint(w, fmt.Sprintf("Finished importing %v rows", len(vehicles)))
 }

@@ -13,11 +13,10 @@ type ImageResponse struct {
 
 func GetImage(vehicleID int) string {
 	// format our URL to include the vehicle's ID
-	URL := "https://izrite.com:5555/image/%v"
-	url := fmt.Sprintf(URL, vehicleID)
+	URL := fmt.Sprintf("https://izrite.com:5555/image/%d", vehicleID)
 
 	// make the api call for image
-	req, _ := http.NewRequest("GET", url, nil)
+	req, _ := http.NewRequest("GET", URL, nil)
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}

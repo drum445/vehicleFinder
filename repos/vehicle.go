@@ -8,7 +8,7 @@ import (
 func (db DB) GetVehicles(page int, params map[string]string) (count int, vehicles models.Vehicles) {
 	// query builder, for each param add a regex lowercase search
 	// to the filter
-	filter := bson.M{}
+	filter := make(bson.M)
 	for k, v := range params {
 		if v != "" {
 			filter[k] = bson.M{"$regex": v, "$options": "i"}
@@ -28,8 +28,7 @@ func (db DB) GetVehicles(page int, params map[string]string) (count int, vehicle
 func (db DB) GetVehicle(vehicleID int) (vehicle models.Vehicle, found bool) {
 	// attempt to look for vehicle, return false if it doesn't exist
 	filter := bson.M{"_id": vehicleID}
-	err := db.Vehicles.Find(filter).One(&vehicle)
-	if err == nil {
+	if db.Vehicles.Find(filter).One(&vehicle) == nil {
 		found = true
 	}
 
