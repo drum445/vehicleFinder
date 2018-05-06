@@ -22,6 +22,19 @@ type response struct {
 func GetVehicles(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
+	// default the page number to 1. If the page has been passed through as a URL
+	// param, first check if it is an int, if it is use it, else reuturn 400
+	page := 1
+	var err error
+
+	if req.URL.Query().Get("page") != "" {
+		page, err = strconv.Atoi(req.URL.Query().Get("page"))
+		if err != nil {
+			http.Error(w, "page must be an int", 400)
+			return
+		}
+	}
+
 	// map[string]string of all our expected params
 	m := make(map[string]string)
 	m["make"] = req.URL.Query().Get("make")
@@ -32,12 +45,12 @@ func GetVehicles(w http.ResponseWriter, req *http.Request) {
 	m["available"] = "Y"
 
 	db := repos.Init()
-	vehicles := db.GetVehicles(m)
+	count, vehicles := db.GetVehicles(page, m)
 	defer db.Close()
 
 	// create our response object and encode to json
 	var resp response
-	resp.Count = len(vehicles)
+	resp.Count = count
 	resp.Vehicles = vehicles
 	json.NewEncoder(w).Encode(resp)
 }
@@ -48,7 +61,7 @@ func GetVehicleByID(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	vehicleID, err := strconv.Atoi(params["vehicleID"])
 	if err != nil {
-		http.Error(w, "vehicle ID must be an int", 401)
+		http.Error(w, "vehicle ID must be an int", 400)
 		return
 	}
 
@@ -57,7 +70,7 @@ func GetVehicleByID(w http.ResponseWriter, req *http.Request) {
 	defer db.Close()
 
 	if !found {
-		http.Error(w, "vehicle ID not found", 401)
+		http.Error(w, "vehicle ID not found", 400)
 		return
 	}
 

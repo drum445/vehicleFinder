@@ -5,7 +5,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func (db DB) GetVehicles(params map[string]string) (vehicles models.Vehicles) {
+func (db DB) GetVehicles(page int, params map[string]string) (count int, vehicles models.Vehicles) {
 	// query builder, for each param add a regex lowercase search
 	// to the filter
 	filter := bson.M{}
@@ -17,7 +17,10 @@ func (db DB) GetVehicles(params map[string]string) (vehicles models.Vehicles) {
 
 	// select from the vehicles coll using our filter and
 	// decode into vehicle object
-	db.Vehicles.Find(filter).All(&vehicles)
+	skip := (page - 1) * 10
+	limit := 10
+	db.Vehicles.Find(filter).Skip(skip).Limit(limit).All(&vehicles)
+	count, _ = db.Vehicles.Find(filter).Count()
 
 	return
 }
