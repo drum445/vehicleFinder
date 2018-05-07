@@ -9,8 +9,8 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/drum445/vehicleFinder/models"
-	"github.com/drum445/vehicleFinder/repos"
+	"github.com/drum445/vehicleFinderMongo/models"
+	"github.com/drum445/vehicleFinderMongo/repos"
 	"github.com/gorilla/mux"
 )
 

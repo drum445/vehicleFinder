@@ -1,7 +1,7 @@
 package repos
 
 import (
-	"github.com/drum445/vehicleFinder/models"
+	"github.com/drum445/vehicleFinderMongo/models"
 	"github.com/globalsign/mgo/bson"
 )
 
