@@ -13,7 +13,7 @@ $ go get
 Providing you have a local MongoDB instance
 
 ```bash
-$ go build && ./vehicleFinder
+$ go build && ./vehicleFinderMongo
 ```
 ### APIs
 #### Importing the CSV file into Mongo
