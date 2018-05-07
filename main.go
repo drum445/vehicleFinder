@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/drum445/vehicleFinderMongo/controllers"
+	"github.com/drum445/vehicleFinder/controllers"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )

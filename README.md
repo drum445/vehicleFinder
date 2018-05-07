@@ -10,10 +10,10 @@ $ go get
 ```
 
 ## Usage
-Providing you have a local MongoDB instance
+Providing you have a local MySQL instance
 
 ```bash
-$ go build && ./vehicleFinderMongo
+$ go build && ./vehicleFinder
 ```
 ### APIs
 #### Importing the CSV file into Mongo

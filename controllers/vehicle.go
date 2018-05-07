@@ -9,8 +9,8 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/drum445/vehicleFinderMongo/models"
-	"github.com/drum445/vehicleFinderMongo/repos"
+	"github.com/drum445/vehicleFinder/models"
+	"github.com/drum445/vehicleFinder/repos"
 	"github.com/gorilla/mux"
 )
 
@@ -45,7 +45,7 @@ func GetVehicles(w http.ResponseWriter, req *http.Request) {
 		"available":  "Y",
 	}
 
-	db := repos.Init()
+	db := repos.Init(false)
 	defer db.Close()
 	count, vehicles := db.GetVehicles(page, m)
 
@@ -66,7 +66,7 @@ func GetVehicleByID(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	db := repos.Init()
+	db := repos.Init(false)
 	defer db.Close()
 	vehicle, found := db.GetVehicle(vehicleID)
 
@@ -87,12 +87,15 @@ func PostVehicles(w http.ResponseWriter, req *http.Request) {
 		panic(err)
 	}
 
+	db := repos.Init(true)
+	defer db.Close()
+	db.CreateDB()
+
 	// load file then skip Header
 	reader := csv.NewReader(file)
 	reader.Read()
 
-	// loop through each record create a vehicle object and append to ur vehicles
-	var vehicles models.Vehicles
+	// loop through each record create a vehicle object and import
 	for {
 		record, err := reader.Read()
 		if err == io.EOF {
@@ -111,13 +114,8 @@ func PostVehicles(w http.ResponseWriter, req *http.Request) {
 		vehicle.Discontinued = record[7]
 		vehicle.Available = record[8]
 
-		vehicles = append(vehicles, vehicle)
+		db.InsertVehicle(vehicle)
 	}
 
-	// once vehicles object is created bulik insert into db
-	db := repos.Init()
-	defer db.Close()
-	db.InsertVehicles(vehicles)
-
-	fmt.Fprint(w, fmt.Sprintf("Finished importing %v rows", len(vehicles)))
+	fmt.Fprint(w, "Finished importing")
 }
