@@ -36,10 +36,17 @@ func (db DB) GetVehicles(page int, params map[string]string) (count int, vehicle
 		}
 	}
 
-	rows, _ := db.Conn.Query("SELECT * FROM vehicle WHERE "+strings.Join(columns, " AND "), values...)
+	// get the count of our query
+	db.Conn.QueryRow("SELECT COUNT(vehicle_id) FROM vehicle WHERE "+strings.Join(columns, " AND "), values...).Scan(&count)
+
+	// add the limit and skip values to our array then get the results
+	limit := 10
+	skip := (page - 1) * limit
+
+	values = append(values, skip, limit)
+	rows, _ := db.Conn.Query("SELECT * FROM vehicle WHERE "+strings.Join(columns, " AND ")+" LIMIT ?, ?", values...)
 	vehicles = rowsToVehicle(rows)
 
-	db.Conn.QueryRow("SELECT COUNT(vehicle_id) FROM vehicle WHERE "+strings.Join(columns, " AND "), values...).Scan(&count)
 	return
 }
 

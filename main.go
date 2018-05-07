@@ -6,11 +6,17 @@ import (
 	"net/http"
 
 	"github.com/drum445/vehicleFinder/controllers"
+	"github.com/drum445/vehicleFinder/repos"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
 func main() {
+	// open connection, make sure db/table exist else create them then close conn
+	db := repos.Init()
+	db.CreateDB()
+	db.Close()
+
 	router := mux.NewRouter()
 
 	// Disable strictslash so both "/api/vehicle" and "/api/vehicle/" work

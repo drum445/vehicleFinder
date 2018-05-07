@@ -45,7 +45,7 @@ func GetVehicles(w http.ResponseWriter, req *http.Request) {
 		"available":  "Y",
 	}
 
-	db := repos.Init(false)
+	db := repos.Init()
 	defer db.Close()
 	count, vehicles := db.GetVehicles(page, m)
 
@@ -66,7 +66,7 @@ func GetVehicleByID(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	db := repos.Init(false)
+	db := repos.Init()
 	defer db.Close()
 	vehicle, found := db.GetVehicle(vehicleID)
 
@@ -87,9 +87,8 @@ func PostVehicles(w http.ResponseWriter, req *http.Request) {
 		panic(err)
 	}
 
-	db := repos.Init(true)
+	db := repos.Init()
 	defer db.Close()
-	db.CreateDB()
 
 	// load file then skip Header
 	reader := csv.NewReader(file)

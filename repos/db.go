@@ -10,14 +10,11 @@ type DB struct {
 	Conn *sql.DB
 }
 
-func Init(create bool) *DB {
+func Init() *DB {
 	var db DB
 	var err error
 	db.Conn, err = sql.Open("mysql", "root:password@/")
-
-	if create {
-		db.CreateDB()
-	}
+	// db.Conn, err = sql.Open("mysql", "user:password@tcp(server.com)/")
 
 	db.Conn.Exec("USE vehicle_finder")
 
