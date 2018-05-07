@@ -2,7 +2,7 @@ package repos
 
 import (
 	"github.com/drum445/vehicleFinder/models"
-	"gopkg.in/mgo.v2/bson"
+	"github.com/globalsign/mgo/bson"
 )
 
 func (db DB) GetVehicles(page int, params map[string]string) (count int, vehicles models.Vehicles) {
