@@ -10,6 +10,15 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+type VehicleRepo struct {
+	DB
+}
+
+func NewVehicleRepo() (vr *VehicleRepo) {
+	vr.Init()
+	return
+}
+
 func rowToVehicle(row *sql.Row) (v models.Vehicle, err error) {
 	err = row.Scan(&v.ID, &v.Make, &v.ShortModel, &v.LongModel, &v.Trim, &v.Derivative, &v.Introduced, &v.Discontinued, &v.Available)
 	return
@@ -25,7 +34,7 @@ func rowsToVehicle(rows *sql.Rows) (vehicles models.Vehicles) {
 	return
 }
 
-func (db DB) GetVehicles(page int, params map[string]string) (count int, vehicles models.Vehicles) {
+func (vr VehicleRepo) GetVehicles(page int, params map[string]string) (count int, vehicles models.Vehicles) {
 	// query builder, for each kvp in our params map make a key like %value%
 	var values []interface{}
 	var columns []string
@@ -37,22 +46,22 @@ func (db DB) GetVehicles(page int, params map[string]string) (count int, vehicle
 	}
 
 	// get the count of our query
-	db.Conn.QueryRow("SELECT COUNT(vehicle_id) FROM vehicle WHERE "+strings.Join(columns, " AND "), values...).Scan(&count)
+	vr.Conn.QueryRow("SELECT COUNT(vehicle_id) FROM vehicle WHERE "+strings.Join(columns, " AND "), values...).Scan(&count)
 
 	// add the limit and skip values to our array then get the results
 	limit := 10
 	skip := (page - 1) * limit
 
 	values = append(values, skip, limit)
-	rows, _ := db.Conn.Query("SELECT * FROM vehicle WHERE "+strings.Join(columns, " AND ")+" LIMIT ?, ?", values...)
+	rows, _ := vr.Conn.Query("SELECT * FROM vehicle WHERE "+strings.Join(columns, " AND ")+" LIMIT ?, ?", values...)
 	vehicles = rowsToVehicle(rows)
 
 	return
 }
 
-func (db DB) GetVehicle(vehicleID int) (vehicle models.Vehicle, found bool) {
+func (vr VehicleRepo) GetVehicle(vehicleID int) (vehicle models.Vehicle, found bool) {
 	// attempt to look for vehicle, return false if it doesn't exist
-	row := db.Conn.QueryRow("SELECT * FROM vehicle WHERE vehicle_id = ?", vehicleID)
+	row := vr.Conn.QueryRow("SELECT * FROM vehicle WHERE vehicle_id = ?", vehicleID)
 	vehicle, err := rowToVehicle(row)
 	if err == nil {
 		found = true
@@ -61,7 +70,7 @@ func (db DB) GetVehicle(vehicleID int) (vehicle models.Vehicle, found bool) {
 	return
 }
 
-func (db DB) InsertVehicle(v models.Vehicle) {
-	db.Conn.Exec("INSERT INTO vehicle VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+func (vr VehicleRepo) InsertVehicle(v models.Vehicle) {
+	vr.Conn.Exec("INSERT INTO vehicle VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
 		v.ID, v.Make, v.ShortModel, v.LongModel, v.Trim, v.Derivative, v.Introduced, v.Discontinued, v.Available)
 }

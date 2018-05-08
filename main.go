@@ -13,7 +13,8 @@ import (
 
 func main() {
 	// open connection, make sure db/table exist else create them then close conn
-	db := repos.Init()
+	var db repos.DB
+	db.Init()
 	db.CreateDB()
 	db.Close()
 

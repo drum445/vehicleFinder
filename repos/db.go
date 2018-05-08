@@ -10,8 +10,7 @@ type DB struct {
 	Conn *sql.DB
 }
 
-func Init() *DB {
-	var db DB
+func (db *DB) Init() {
 	var err error
 	db.Conn, err = sql.Open("mysql", "root:password@/")
 	// db.Conn, err = sql.Open("mysql", "user:password@tcp(server.com)/")
@@ -22,8 +21,6 @@ func Init() *DB {
 		fmt.Println(err)
 		log.Fatal(err)
 	}
-
-	return &db
 }
 
 func (db DB) CreateDB() {

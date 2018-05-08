@@ -45,9 +45,9 @@ func GetVehicles(w http.ResponseWriter, req *http.Request) {
 		"available":  "Y",
 	}
 
-	db := repos.Init()
-	defer db.Close()
-	count, vehicles := db.GetVehicles(page, m)
+	vr := repos.NewVehicleRepo()
+	defer vr.Close()
+	count, vehicles := vr.GetVehicles(page, m)
 
 	// create our response object and encode to json
 	var resp response
@@ -66,9 +66,9 @@ func GetVehicleByID(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	db := repos.Init()
-	defer db.Close()
-	vehicle, found := db.GetVehicle(vehicleID)
+	vr := repos.NewVehicleRepo()
+	defer vr.Close()
+	vehicle, found := vr.GetVehicle(vehicleID)
 
 	if !found {
 		http.Error(w, "vehicle ID not found", 400)
@@ -87,8 +87,8 @@ func PostVehicles(w http.ResponseWriter, req *http.Request) {
 		panic(err)
 	}
 
-	db := repos.Init()
-	defer db.Close()
+	vr := repos.NewVehicleRepo()
+	defer vr.Close()
 
 	// load file then skip Header
 	reader := csv.NewReader(file)
@@ -113,7 +113,7 @@ func PostVehicles(w http.ResponseWriter, req *http.Request) {
 		vehicle.Discontinued = record[7]
 		vehicle.Available = record[8]
 
-		db.InsertVehicle(vehicle)
+		vr.InsertVehicle(vehicle)
 	}
 
 	fmt.Fprint(w, "Finished importing")
