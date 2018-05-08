@@ -14,9 +14,10 @@ type VehicleRepo struct {
 	DB
 }
 
-func NewVehicleRepo() (vr *VehicleRepo) {
+func NewVehicleRepo() *VehicleRepo {
+	var vr VehicleRepo
 	vr.Init()
-	return
+	return &vr
 }
 
 func rowToVehicle(row *sql.Row) (v models.Vehicle, err error) {
