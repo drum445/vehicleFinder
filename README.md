@@ -16,7 +16,7 @@ Providing you have a local MySQL instance
 $ go build && ./vehicleFinder
 ```
 ### APIs
-#### Importing the CSV file into Mongo
+#### Importing the CSV file into MySQL
 ```
 POST: http://localhost:5000/api/vehicle/import
 ```
