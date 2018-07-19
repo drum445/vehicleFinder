@@ -1,21 +1,24 @@
 package repos
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
+
+	// MySQL driver
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 )
 
 type DB struct {
-	Conn *sql.DB
+	conn *sqlx.DB
 }
 
 func (db *DB) Init() {
 	var err error
-	db.Conn, err = sql.Open("mysql", "root:password@/")
-	// db.Conn, err = sql.Open("mysql", "user:password@tcp(server.com)/")
+	db.conn, err = sqlx.Open("mysql", "root:password@/")
+	// db.conn, err = sql.Open("mysql", "user:password@tcp(server.com)/")
 
-	db.Conn.Exec("USE vehicle_finder")
+	db.conn.Exec("USE vehicle_finder")
 
 	if err != nil {
 		fmt.Println(err)
@@ -24,8 +27,8 @@ func (db *DB) Init() {
 }
 
 func (db DB) CreateDB() {
-	db.Conn.Exec("CREATE DATABASE IF NOT EXISTS vehicle_finder")
-	db.Conn.Exec(`CREATE TABLE IF NOT EXISTS vehicle_finder.vehicle (
+	db.conn.MustExec("CREATE DATABASE IF NOT EXISTS vehicle_finder")
+	db.conn.MustExec(`CREATE TABLE IF NOT EXISTS vehicle_finder.vehicle (
 		vehicle_id int(11) NOT NULL,
 		make varchar(45) DEFAULT NULL,
 		short_model varchar(45) DEFAULT NULL,
@@ -41,5 +44,5 @@ func (db DB) CreateDB() {
 }
 
 func (db DB) Close() {
-	db.Conn.Close()
+	db.conn.Close()
 }
