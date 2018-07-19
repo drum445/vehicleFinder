@@ -29,7 +29,7 @@ func (vr VehicleRepo) GetVehicles(page int, params map[string]string) (count int
 	}
 
 	// get the count of our query
-	vr.conn.Select(&count, "SELECT COUNT(vehicle_id) FROM vehicle WHERE "+strings.Join(columns, " AND "), values...)
+	vr.conn.Get(&count, "SELECT COUNT(vehicle_id) FROM vehicle WHERE "+strings.Join(columns, " AND "), values...)
 
 	// add the limit and skip values to our array then get the results
 	limit := 10
