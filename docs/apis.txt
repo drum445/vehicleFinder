@@ -1,5 +1,5 @@
 Import File:
-POST: http://localhost:5000/api/vehicle/import
+POST: http://localhost:5000/api/vehicle
 
 Vehicles:
 GET: http://localhost:5000/api/vehicle
@@ -9,6 +9,7 @@ You can add the following URL params:
   longMondel
   trim
   derivative
+  page
 
 Vehicle:
 GET: http://localhost:5000/api/vehicle/:id

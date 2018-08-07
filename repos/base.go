@@ -34,7 +34,7 @@ func (db DB) CreateDB() {
 		short_model varchar(45) DEFAULT NULL,
 		long_model varchar(45) DEFAULT NULL,
 		trim varchar(45) DEFAULT NULL,
-		derivative varchar(45) DEFAULT NULL,
+		derivative varchar(128) DEFAULT NULL,
 		introduced varchar(45) DEFAULT NULL,
 		discontinued varchar(45) DEFAULT NULL,
 		available varchar(45) DEFAULT NULL,

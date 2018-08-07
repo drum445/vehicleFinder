@@ -43,7 +43,7 @@ func (vr VehicleRepo) GetVehicles(page int, params map[string]string) (count int
 
 func (vr VehicleRepo) GetVehicle(vehicleID int) (vehicle models.Vehicle, found bool) {
 	// attempt to look for vehicle, return false if it doesn't exist
-	err := vr.conn.Select(&vehicle, "SELECT * FROM vehicle WHERE vehicle_id = ?", vehicleID)
+	err := vr.conn.Get(&vehicle, "SELECT * FROM vehicle WHERE vehicle_id = ?;", vehicleID)
 	if err == nil {
 		found = true
 	}
@@ -52,6 +52,6 @@ func (vr VehicleRepo) GetVehicle(vehicleID int) (vehicle models.Vehicle, found b
 }
 
 func (vr VehicleRepo) InsertVehicle(v models.Vehicle) {
-	vr.conn.NamedExec(`INSERT INTO vehicle VALUES
-						(:id, :make, :short_model, :long_model, :trim, :derivative, :introduced, :discontinued, :available)`, v)
+	vr.conn.Exec("INSERT INTO vehicle VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", v.ID, v.Make, v.ShortModel, v.LongModel, v.Trim, v.Derivative, v.Introduced,
+		v.Discontinued, v.Available)
 }

@@ -1,6 +1,7 @@
-Start MongoDB
+Start local MySQL
+In "repos/base.go" you may need to change the credentials
 
-$ cd backend
+$ cd vehicleFinder
 $ go get
 $ go build
-$ ./be
+$ ./vehicleFinder

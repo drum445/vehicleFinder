@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"bufio"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
@@ -37,12 +38,12 @@ func GetVehicles(w http.ResponseWriter, req *http.Request) {
 
 	// map[string]string of all our expected params
 	m := map[string]string{
-		"make":       req.URL.Query().Get("make"),
-		"shortModel": req.URL.Query().Get("shortModel"),
-		"longModel":  req.URL.Query().Get("longModel"),
-		"trim":       req.URL.Query().Get("trim"),
-		"derivative": req.URL.Query().Get("derivative"),
-		"available":  "Y",
+		"make":        req.URL.Query().Get("make"),
+		"short_model": req.URL.Query().Get("shortModel"),
+		"long_model":  req.URL.Query().Get("longModel"),
+		"trim":        req.URL.Query().Get("trim"),
+		"derivative":  req.URL.Query().Get("derivative"),
+		"available":   "Y",
 	}
 
 	vr := repos.NewVehicleRepo()
@@ -80,8 +81,9 @@ func GetVehicleByID(w http.ResponseWriter, req *http.Request) {
 }
 
 func PostVehicles(w http.ResponseWriter, req *http.Request) {
-	file, err := os.Open("Vehicles.csv")
-	defer file.Close()
+	csvFile, err := os.Open("Vehicles.csv")
+
+	defer csvFile.Close()
 
 	if err != nil {
 		panic(err)
@@ -91,7 +93,7 @@ func PostVehicles(w http.ResponseWriter, req *http.Request) {
 	defer vr.Close()
 
 	// load file then skip Header
-	reader := csv.NewReader(file)
+	reader := csv.NewReader(bufio.NewReader(csvFile))
 	reader.Read()
 
 	// loop through each record create a vehicle object and import
@@ -117,4 +119,5 @@ func PostVehicles(w http.ResponseWriter, req *http.Request) {
 	}
 
 	fmt.Fprint(w, "Finished importing")
+
 }

@@ -18,10 +18,10 @@ $ go build && ./vehicleFinder
 ### APIs
 #### Importing the CSV file into MySQL
 ```
-POST: http://localhost:5000/api/vehicle/import
+POST: http://localhost:5000/api/vehicle
 ```
 
-#### Retrieving all vehicles
+#### Retrieve all available vehicles
 ```
 GET: http://localhost:5000/api/vehicle
 ```
@@ -33,7 +33,9 @@ You can add the following URL params:<br>
 - derivative
 - page (defaults to 1)
 
-#### Retrieve one vehicle with image
+Example: http://localhost:5000/api/vehicle?make=mercedes&shortModel=B Class&trim=SE
+
+#### Retrieve one vehicle and it's image
 ```
 GET: http://localhost:5000/api/vehicle/:id
 ```
