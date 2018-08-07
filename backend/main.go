@@ -20,12 +20,10 @@ func main() {
 
 	router := mux.NewRouter()
 
-	// Disable strictslash so both "/api/vehicle" and "/api/vehicle/" work
-	router.StrictSlash(true)
-
-	router.HandleFunc("/api/vehicle", controllers.GetVehicles).Methods("GET")
-	router.HandleFunc("/api/vehicle", controllers.PostVehicles).Methods("POST")
-	router.HandleFunc("/api/vehicle/{vehicleID}", controllers.GetVehicleByID).Methods("GET")
+	vehicleRouter := router.PathPrefix("/api/vehicle").Subrouter()
+	vehicleRouter.HandleFunc("", controllers.GetVehicles).Methods("GET")
+	vehicleRouter.HandleFunc("", controllers.PostVehicles).Methods("POST")
+	vehicleRouter.HandleFunc("/{vehicleID}", controllers.GetVehicleByID).Methods("GET")
 
 	fmt.Println("started on port :5000")
 
@@ -35,5 +33,5 @@ func main() {
 		handlers.AllowedOrigins([]string{"*"}),
 		handlers.AllowedMethods([]string{"POST", "PUT", "DELETE", "PATCH", "OPTIONS"}),
 		handlers.AllowedHeaders([]string{"Content-Type", "X-Requested-With"}),
-	)(router)))
+	)(suffixMiddleware(router))))
 }

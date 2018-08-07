@@ -80,7 +80,7 @@ export default {
       var self = this;
       clearTimeout(this.typingtimer);
       this.typingtimer = setTimeout(function () {
-        self.getVehicles();
+        self.filterVehicles();
       }, 500);
 
     }

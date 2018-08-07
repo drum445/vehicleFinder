@@ -55,6 +55,6 @@ func (vr VehicleRepo) GetVehicle(vehicleID int) (vehicle models.Vehicle, found b
 }
 
 func (vr VehicleRepo) InsertVehicle(v models.Vehicle) {
-	vr.conn.Exec("INSERT INTO vehicle VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", v.ID, v.Make, v.ShortModel, v.LongModel, v.Trim, v.Derivative, v.Introduced,
-		v.Discontinued, v.Available)
+	vr.conn.Exec("INSERT IGNORE INTO vehicle VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", v.ID, v.Make, v.ShortModel, v.LongModel, v.Trim, v.Derivative,
+		v.Introduced, v.Discontinued, v.Available)
 }
