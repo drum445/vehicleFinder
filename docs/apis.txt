@@ -9,6 +9,7 @@ You can add the following URL params:
   longMondel
   trim
   derivative
+  free
   page
 
 Vehicle:

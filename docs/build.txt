@@ -1,7 +1,13 @@
 Start local MySQL
-In "repos/base.go" you may need to change the credentials
+In "backend/repos/base.go" you may need to change the credentials
 
-$ cd vehicleFinder
-$ go get
-$ go build
-$ ./vehicleFinder
+Backend:
+  $ cd backend
+  $ go get
+  $ go build
+  $ ./backend
+
+Frontend:
+  $ cd frontend
+  $ npm install
+  $ npm run dev

@@ -1,2 +1,4 @@
 GoLang
-Local MongoDB instance
+Local MySQL instance
+Node
+npm

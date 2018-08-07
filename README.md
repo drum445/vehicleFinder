@@ -2,18 +2,20 @@
 
 API for retrieving vehicles
 
-## Installation
-Run in a terminal in your project root
-
-```bash
-$ go get
-```
-
 ## Usage
 Providing you have a local MySQL instance
 
+Backend:  
 ```bash
-$ go build && ./vehicleFinder
+$ cd backend
+$ go get
+$ go build && ./backend
+```
+Frontend:  
+```bash
+$ cd frontend
+$ npm build
+$ npm run dev
 ```
 ### APIs
 #### Importing the CSV file into MySQL
@@ -31,6 +33,7 @@ You can add the following URL params:<br>
 - longMondel
 - trim
 - derivative
+- free (will search all columns)
 - page (defaults to 1)
 
 Example: http://localhost:5000/api/vehicle?make=mercedes&shortModel=B&trim=SE
