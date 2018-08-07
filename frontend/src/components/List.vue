@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sm-12">
         <form v-on:submit.prevent="filterVehicles">
-          <input v-model="filters.free" type="text" name="freeSearch" value="" placeholder="Free Search">
+          <input v-model="filters.free" v-on:keyup="startSearch" type="text" name="freeSearch" value="" placeholder="Free Search">
         </form>
         <hr>
         <table class="table-hover">
@@ -49,10 +49,13 @@ export default {
       filters: {"page": 1},
       vehicles: [],
       count: 0,
+      typingtimer: null
     }
   },
   methods: {
     getVehicles() {
+      clearTimeout(this.typingtimer);
+
   		axios.get(`${this.$parent.baseURL}`, {"params": this.filters}).then(response => {
         this.count = response.data.count;
   			this.vehicles = response.data.vehicles;
@@ -72,6 +75,14 @@ export default {
     filterVehicles() {
       this.filters["page"] = 1;
       this.getVehicles();
+    },
+    startSearch() {
+      var self = this;
+      clearTimeout(this.typingtimer);
+      this.typingtimer = setTimeout(function () {
+        self.getVehicles();
+      }, 500);
+
     }
   },
   mounted() {
