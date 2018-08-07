@@ -33,7 +33,7 @@ You can add the following URL params:<br>
 - derivative
 - page (defaults to 1)
 
-Example: http://localhost:5000/api/vehicle?make=mercedes&shortModel=B Class&trim=SE
+Example: http://localhost:5000/api/vehicle?make=mercedes&shortModel=B&trim=SE
 
 #### Retrieve one vehicle and it's image
 ```
