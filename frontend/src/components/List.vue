@@ -2,7 +2,7 @@
   <div class="list">
     <div class="row">
       <div class="col-sm-12">
-        <form v-on:submit.prevent="filterLeads">
+        <form v-on:submit.prevent="filterVehicles">
           <input v-model="filters.free" type="text" name="freeSearch" value="" placeholder="Free Search">
         </form>
         <hr>
@@ -69,7 +69,7 @@ export default {
       this.filters["page"]--;
       this.getVehicles();
     },
-    filterLeads() {
+    filterVehicles() {
       this.filters["page"] = 1;
       this.getVehicles();
     }
